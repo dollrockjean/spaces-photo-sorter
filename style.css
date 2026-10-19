@@ -150,3 +150,11 @@ dialog h2 { margin-bottom: 4px; }
 .pickgrid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .pickgrid button { padding: 16px 26px; font-size: 1.1rem; font-weight: 700; min-width: 180px; background: var(--pine); color: #fff; border-color: var(--pine); }
 @media (prefers-color-scheme: dark) { .pickgrid button { color: #08140e; } }
+
+.staged-bar { padding: 14px 20px; font-size: 1.05rem; font-weight: 600; gap: 18px; border-top: 3px solid var(--pine); }
+.staged-bar .primary { font-size: 1.1rem; padding: 12px 22px; font-weight: 800; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) { .staged-bar .primary { animation: none; } }
+
+.two input { min-width: 0; width: 100%; }
+.two { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }

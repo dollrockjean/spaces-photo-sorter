@@ -362,7 +362,7 @@ function syncStaged() {
   const moving = all.filter((s) => s.a.kind !== 'unknown').length;
   const unk = all.length - moving;
   bar.hidden = !moving;
-  $('#stagedText').textContent = `${moving} photo${moving === 1 ? '' : 's'} labeled${unk ? `, ${unk} unknown` : ''}`;
+  $('#stagedText').textContent = `${moving} photo${moving === 1 ? '' : 's'} labeled but NOT moved yet${unk ? ` (${unk} unknown)` : ''}. Press the button to create the folders and move them.`;
 }
 
 function syncAll() {
