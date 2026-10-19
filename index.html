@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spaces Photo Sorter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="signin" class="signin">
+    <h1>Spaces Photo Sorter</h1>
+    <p>Sort job photos into the right client, house, and room folders. Files get renamed to match.</p>
+    <p id="setupNote" class="note" hidden>Google sign-in isn't set up yet. Add the client ID in <code>config.js</code>, or <a href="?demo=1">try the demo</a>.</p>
+    <p id="signinError" class="error" role="alert" hidden></p>
+    <button id="signinBtn" class="primary" type="button">Sign in with Google</button>
+  </main>
+
+  <div id="app" hidden>
+    <div id="demoBanner" class="demo" hidden>Demo mode. These photos and folders are fake, so nothing here touches Drive.</div>
+    <header class="top">
+      <h1>Spaces Photo Sorter</h1>
+      <div class="top-right">
+        <span id="who" class="who"></span>
+        <button id="undoBtn" type="button" class="ghost" disabled>Undo last batch</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="browse" aria-label="Photos">
+        <nav id="crumbs" class="crumbs" aria-label="Folder path"></nav>
+        <div id="subfolders" class="subfolders"></div>
+        <div class="toolbar">
+          <span id="folderCount" class="muted"></span>
+          <span class="spacer"></span>
+          <button id="selAll" type="button" class="ghost">Select all</button>
+          <button id="selNone" type="button" class="ghost">Clear selection</button>
+        </div>
+        <div id="grid" class="grid"></div>
+      </section>
+
+      <aside id="panel" class="panel" aria-label="Where the photos go"></aside>
+    </div>
+
+    <div id="stagedBar" class="staged-bar" hidden>
+      <span id="stagedText"></span>
+      <button id="reviewBtn" type="button" class="primary">Review and move</button>
+    </div>
+    <p id="status" class="sr-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <dialog id="review" aria-labelledby="rvTitle">
+    <h2 id="rvTitle">Check before moving</h2>
+    <p id="rvSummary" class="muted"></p>
+    <div id="rvList" class="rv-list"></div>
+    <p id="rvProgress" class="rv-progress" role="status" aria-live="polite"></p>
+    <div class="actions">
+      <button id="rvCancel" type="button" class="ghost">Back</button>
+      <button id="rvApply" type="button" class="primary">Move photos</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
