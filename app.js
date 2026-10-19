@@ -632,9 +632,18 @@ function wire() {
     const map = { newName: 'newName', newAddr: 'newAddr', otherType: 'otherType', conNew: 'conNew' };
     if (map[e.target.id]) { state[map[e.target.id]] = e.target.value; syncPanel(); }
   });
+  // Windows fires mouseover while the list scrolls under a still mouse; only react when the pointer really moved.
+  let lastX = -1;
+  let lastY = -1;
   const hover = (e) => {
+    if (e.type === 'mouseover') {
+      if (e.clientX === lastX && e.clientY === lastY) return;
+      lastX = e.clientX; lastY = e.clientY;
+    }
     const b = e.target.closest?.('[data-folder]');
-    state.hoverCat = b && !b.disabled ? { group: b.dataset.group, cat: GROUPS[b.dataset.group].find((c) => c.folder === b.dataset.folder) } : null;
+    const next = b && !b.disabled ? { group: b.dataset.group, cat: GROUPS[b.dataset.group].find((c) => c.folder === b.dataset.folder) } : null;
+    if ((next?.cat ?? null) === (state.hoverCat?.cat ?? null)) return;
+    state.hoverCat = next;
     renderReceipt();
   };
   panel.addEventListener('mouseover', hover);

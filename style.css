@@ -158,3 +158,8 @@ dialog h2 { margin-bottom: 4px; }
 
 .two input { min-width: 0; width: 100%; }
 .two { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+
+/* steady panel: fixed-height receipt so hovering never moves the room list; no scroll chaining or anchoring jumps (Windows) */
+.panel { scrollbar-gutter: stable; overscroll-behavior: contain; overflow-anchor: none; }
+.receipt { height: 8rem; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+.cats button, .chips button, .seg button { touch-action: manipulation; }
