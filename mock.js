@@ -25,17 +25,17 @@ export function createMockBackend() {
   add(root, 'SDH Project Photos', null, { folder: true });
   const unfinished = addFolder(config.UNFINISHED_NAME, root);
   const toSort = addFolder('Pictures To Sort', root, config.START_FOLDER_ID);
-  addFolder('ZIPS', root);
-  addFolder('Prints', root);
-  addFolder('PLACEHOLDER - Client Name – Address', root);
+  addFolder('ZIPs (Ignore)', root);
+  const sorted = addFolder(config.SORTED_NAME, root, config.SORTED_FOLDER_ID);
+  addFolder('Prints', sorted);
 
-  const jach = addFolder('Jachowicz – 123 Main St, Pullman MI', root);
+  const jach = addFolder('Jachowicz – 123 Main St, Pullman MI', sorted);
   const jachMain = addFolder('Main House', jach);
   const jachInt = addFolder('Interior', jachMain);
   const jachKitchen = addFolder('Kitchen', jachInt);
   addFile('Jachowicz_MainHouse_Kitchen_01.jpg', jachKitchen, 30);
   addFile('Jachowicz_MainHouse_Kitchen_02.jpg', jachKitchen, 40);
-  addFolder('Smith – 45 Lake Rd, Saugatuck MI', root);
+  addFolder('Smith – 45 Lake Rd, Saugatuck MI', sorted);
 
   addFolder('CONLEY PROJECT', unfinished);
   addFolder('SHARPE PROJECT', unfinished);

@@ -87,7 +87,7 @@ async function onSignIn() {
 }
 
 async function loadLists() {
-  const root = await state.be.listFolder(config.ROOT_FOLDER_ID);
+  const root = await state.be.listFolder(config.SORTED_FOLDER_ID);
   const isClient = (f) => !config.NOT_CLIENTS.includes(f.name) && !f.name.startsWith(config.NOT_CLIENT_PREFIX);
   const names = new Set(root.folders.filter(isClient).map((f) => f.name));
   const printsId = root.folders.find((f) => f.name === config.PRINTS_NAME)?.id;
@@ -338,7 +338,7 @@ function renderReceipt() {
     const cf = clientFolder();
     const type = projectType();
     const hov = state.hoverCat;
-    const segs = [part(ROOT_NAME), ...(state.version === 'print' ? [part(config.PRINTS_NAME)] : []), cf ? part(cf) : gap('client-house')];
+    const segs = [part(config.SORTED_NAME), ...(state.version === 'print' ? [part(config.PRINTS_NAME)] : []), cf ? part(cf) : gap('client-house')];
     if (cf) segs.push(type ? part(type) : gap('project type'));
     if (cf && type) segs.push(hov ? part(hov.group) : gap('room'));
     if (cf && type && hov) segs.push(part(hov.cat.folder));
@@ -405,7 +405,7 @@ async function buildPlan() {
   async function dirNames(path) {
     const key = path.join('\u0001');
     if (dirCache.has(key)) return dirCache.get(key);
-    let id = config.ROOT_FOLDER_ID;
+    let id = config.SORTED_FOLDER_ID;
     for (const seg of path) {
       if (!id) break;
       id = await state.be.findChild(id, seg);
@@ -420,7 +420,7 @@ async function buildPlan() {
   for (const { file, a } of state.staged.values()) {
     if (a.kind === 'unknown') { unknown += 1; continue; }
     if (a.kind === 'construction') {
-      items.push({ id: file.id, from: file.parent, oldName: file.name, newName: file.name, path: [config.UNFINISHED_NAME, a.target] });
+      items.push({ id: file.id, from: file.parent, oldName: file.name, newName: file.name, base: 'root', path: [config.UNFINISHED_NAME, a.target] });
       continue;
     }
     const path = [...(a.root ? [a.root] : []), a.clientFolder, a.type, a.group, a.cat.folder];
@@ -428,7 +428,7 @@ async function buildPlan() {
     const key = path.join('\u0001');
     const n = counters.get(key) ?? nextNumber(await dirNames(path), prefix);
     counters.set(key, n + 1);
-    items.push({ id: file.id, from: file.parent, oldName: file.name, newName: buildName(prefix, n, extOf(file.name)), path });
+    items.push({ id: file.id, from: file.parent, oldName: file.name, newName: buildName(prefix, n, extOf(file.name)), base: 'sorted', path });
   }
   return { items, unknown };
 }
@@ -454,7 +454,7 @@ async function openReview() {
   }
   const groups = new Map();
   plan.items.forEach((it) => {
-    const k = [ROOT_NAME, ...it.path].join(' › ');
+    const k = [it.base === 'root' ? ROOT_NAME : config.SORTED_NAME, ...it.path].join(' › ');
     if (!groups.has(k)) groups.set(k, []);
     groups.get(k).push(it);
   });
@@ -483,9 +483,9 @@ async function applyPlan() {
     prog.textContent = 'Creating folders…';
     const dest = new Map();
     for (const it of plan.items) {
-      const key = it.path.join('\u0001');
+      const key = `${it.base}\u0001${it.path.join('\u0001')}`;
       if (dest.has(key)) continue;
-      let id = config.ROOT_FOLDER_ID;
+      let id = it.base === 'root' ? config.ROOT_FOLDER_ID : config.SORTED_FOLDER_ID;
       for (const seg of it.path) id = await state.be.ensureFolder(id, seg);
       dest.set(key, id);
     }
@@ -493,7 +493,7 @@ async function applyPlan() {
     const worker = async () => {
       while (queue.length) {
         const it = queue.shift();
-        const to = dest.get(it.path.join('\u0001'));
+        const to = dest.get(`${it.base}\u0001${it.path.join('\u0001')}`);
         try {
           await state.be.moveFile(it.id, it.from, to, it.newName);
           done.push({ ...it, to });

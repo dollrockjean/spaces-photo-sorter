@@ -7,6 +7,10 @@ export const config = {
   // "SDH Project Photos" in Drive.
   ROOT_FOLDER_ID: '15hW6ZvxgX3vf-trquAI2CWtB-wH3xFmw',
 
+  // Finished photos land here: "Sorted (Website Ready)" inside SDH Project Photos. The website reads this folder.
+  SORTED_FOLDER_ID: '1p2VIDMaBGQwtTdnb4IwaklvmhHTVCCI7',
+  SORTED_NAME: 'Sorted (Website Ready)',
+
   // Folder the tool opens first: "Pictures To Sort".
   START_FOLDER_ID: '1k0iYbiBgSEcG-V0A1MTnl9NKX5C36srG',
 
@@ -17,6 +21,6 @@ export const config = {
   PRINTS_NAME: 'Prints',
 
   // Folders in the root that are not client-house folders.
-  NOT_CLIENTS: ['Unfinished Projects', 'Pictures To Sort', 'ZIPS', 'Prints'],
+  NOT_CLIENTS: ['Unfinished Projects', 'Pictures To Sort', 'ZIPS', 'ZIPs (Ignore)', 'Prints', 'Sorted (Website Ready)'],
   NOT_CLIENT_PREFIX: 'PLACEHOLDER',
 };
